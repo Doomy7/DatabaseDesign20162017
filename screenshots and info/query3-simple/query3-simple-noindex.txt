@@ -1,0 +1,202 @@
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "2386780.71"
+    },
+    "nested_loop": [
+      {
+        "table": {
+          "table_name": "collateral",
+          "access_type": "ALL",
+          "possible_keys": [
+            "contract_id"
+          ],
+          "rows_examined_per_scan": 451773,
+          "rows_produced_per_join": 15057,
+          "filtered": "3.33",
+          "cost_info": {
+            "read_cost": "92249.08",
+            "eval_cost": "3011.52",
+            "prefix_cost": "95260.60",
+            "data_read_per_join": "2M"
+          },
+          "used_columns": [
+            "collateral_id",
+            "collateral_amount",
+            "collateral_relation_type",
+            "contract_id"
+          ],
+          "attached_condition": "(((`projecta`.`collateral`.`collateral_relation_type` = '2') and (`projecta`.`collateral`.`collateral_amount` > 1000000)) and (`projecta`.`collateral`.`contract_id` is not null))"
+        }
+      },
+      {
+        "table": {
+          "table_name": "contract",
+          "access_type": "eq_ref",
+          "possible_keys": [
+            "PRIMARY",
+            "customer_id"
+          ],
+          "key": "PRIMARY",
+          "used_key_parts": [
+            "contract_id"
+          ],
+          "key_length": "44",
+          "ref": [
+            "projecta.collateral.contract_id"
+          ],
+          "rows_examined_per_scan": 1,
+          "rows_produced_per_join": 15057,
+          "filtered": "100.00",
+          "cost_info": {
+            "read_cost": "15057.59",
+            "eval_cost": "3011.52",
+            "prefix_cost": "113329.71",
+            "data_read_per_join": "1M"
+          },
+          "used_columns": [
+            "contract_id",
+            "customer_id"
+          ],
+          "attached_condition": "(`projecta`.`contract`.`customer_id` is not null)"
+        }
+      },
+      {
+        "table": {
+          "table_name": "customer",
+          "access_type": "eq_ref",
+          "possible_keys": [
+            "PRIMARY"
+          ],
+          "key": "PRIMARY",
+          "used_key_parts": [
+            "customer_id"
+          ],
+          "key_length": "29",
+          "ref": [
+            "projecta.contract.customer_id"
+          ],
+          "rows_examined_per_scan": 1,
+          "rows_produced_per_join": 15057,
+          "filtered": "100.00",
+          "cost_info": {
+            "read_cost": "15057.59",
+            "eval_cost": "3011.52",
+            "prefix_cost": "131398.83",
+            "data_read_per_join": "941K"
+          },
+          "used_columns": [
+            "customer_id",
+            "birth_date"
+          ],
+          "attached_condition": "((<cache>(year(curdate())) - year(`projecta`.`customer`.`birth_date`)) > 60)"
+        }
+      },
+      {
+        "table": {
+          "table_name": "account",
+          "access_type": "ref",
+          "possible_keys": [
+            "PRIMARY",
+            "contract_id"
+          ],
+          "key": "contract_id",
+          "used_key_parts": [
+            "contract_id"
+          ],
+          "key_length": "45",
+          "ref": [
+            "projecta.collateral.contract_id"
+          ],
+          "rows_examined_per_scan": 9,
+          "rows_produced_per_join": 148915,
+          "filtered": "100.00",
+          "using_index": true,
+          "cost_info": {
+            "read_cost": "16544.90",
+            "eval_cost": "29783.06",
+            "prefix_cost": "177726.78",
+            "data_read_per_join": "21M"
+          },
+          "used_columns": [
+            "account_id",
+            "contract_id"
+          ]
+        }
+      },
+      {
+        "table": {
+          "table_name": "Selection2",
+          "access_type": "ref",
+          "possible_keys": [
+            "<auto_key1>"
+          ],
+          "key": "<auto_key1>",
+          "used_key_parts": [
+            "account_id"
+          ],
+          "key_length": "48",
+          "ref": [
+            "projecta.account.account_id"
+          ],
+          "rows_examined_per_scan": 12,
+          "rows_produced_per_join": 613564,
+          "filtered": "33.33",
+          "cost_info": {
+            "read_cost": "1840878.27",
+            "eval_cost": "122712.94",
+            "prefix_cost": "2386780.71",
+            "data_read_per_join": "37M"
+          },
+          "used_columns": [
+            "maxbal",
+            "account_id"
+          ],
+          "attached_condition": "(`selection2`.`maxbal` <= 500000)",
+          "materialized_from_subquery": {
+            "using_temporary_table": true,
+            "dependent": false,
+            "cacheable": true,
+            "query_block": {
+              "select_id": 3,
+              "cost_info": {
+                "query_cost": "1967506.40"
+              },
+              "grouping_operation": {
+                "using_filesort": false,
+                "table": {
+                  "table_name": "balance",
+                  "access_type": "index",
+                  "possible_keys": [
+                    "account_id"
+                  ],
+                  "key": "account_id",
+                  "used_key_parts": [
+                    "account_id"
+                  ],
+                  "key_length": "48",
+                  "rows_examined_per_scan": 9647452,
+                  "rows_produced_per_join": 964745,
+                  "filtered": "10.00",
+                  "cost_info": {
+                    "read_cost": "1774557.36",
+                    "eval_cost": "192949.04",
+                    "prefix_cost": "1967506.40",
+                    "data_read_per_join": "80M"
+                  },
+                  "used_columns": [
+                    "account_id",
+                    "balance_value",
+                    "balance_type"
+                  ],
+                  "attached_condition": "(`projecta`.`balance`.`balance_type` = 'Capital')"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

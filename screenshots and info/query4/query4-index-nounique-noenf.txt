@@ -1,0 +1,139 @@
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "152307.79"
+    },
+    "nested_loop": [
+      {
+        "table": {
+          "table_name": "selection1",
+          "access_type": "ALL",
+          "rows_examined_per_scan": 50997,
+          "rows_produced_per_join": 16997,
+          "filtered": "33.33",
+          "cost_info": {
+            "read_cost": "9359.79",
+            "eval_cost": "3399.46",
+            "prefix_cost": "12759.25",
+            "data_read_per_join": "1M"
+          },
+          "used_columns": [
+            "balance_value",
+            "account_id"
+          ],
+          "attached_condition": "((`selection1`.`balance_value` <= 10000) and (`selection1`.`account_id` is not null))",
+          "materialized_from_subquery": {
+            "using_temporary_table": true,
+            "dependent": false,
+            "cacheable": true,
+            "query_block": {
+              "select_id": 2,
+              "cost_info": {
+                "query_cost": "139757.60"
+              },
+              "grouping_operation": {
+                "using_filesort": false,
+                "table": {
+                  "table_name": "balance",
+                  "access_type": "range",
+                  "possible_keys": [
+                    "balanceIndex"
+                  ],
+                  "key": "balanceIndex",
+                  "used_key_parts": [
+                    "account_id",
+                    "balance_type"
+                  ],
+                  "key_length": "75",
+                  "rows_examined_per_scan": 50997,
+                  "rows_produced_per_join": 50997,
+                  "filtered": "100.00",
+                  "using_index_for_group_by": true,
+                  "cost_info": {
+                    "read_cost": "129558.20",
+                    "eval_cost": "10199.40",
+                    "prefix_cost": "139757.60",
+                    "data_read_per_join": "4M"
+                  },
+                  "used_columns": [
+                    "account_id",
+                    "balance_value",
+                    "balance_type"
+                  ],
+                  "attached_condition": "(`projecta`.`balance`.`balance_type` = 'Interest')"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "table": {
+          "table_name": "collateral",
+          "access_type": "ref",
+          "possible_keys": [
+            "PRIMARY",
+            "account_id",
+            "collateralIndex"
+          ],
+          "key": "account_id",
+          "used_key_parts": [
+            "account_id"
+          ],
+          "key_length": "48",
+          "ref": [
+            "selection1.account_id"
+          ],
+          "rows_examined_per_scan": 6,
+          "rows_produced_per_join": 5537,
+          "filtered": "5.00",
+          "cost_info": {
+            "read_cost": "110752.82",
+            "eval_cost": "1107.53",
+            "prefix_cost": "145662.64",
+            "data_read_per_join": "908K"
+          },
+          "used_columns": [
+            "collateral_id",
+            "collateral_type",
+            "collateral_relation_type",
+            "account_id"
+          ],
+          "attached_condition": "((`projecta`.`collateral`.`collateral_relation_type` = '3') and (`projecta`.`collateral`.`collateral_type` = '1'))"
+        }
+      },
+      {
+        "table": {
+          "table_name": "real_estate",
+          "access_type": "ref",
+          "possible_keys": [
+            "collateral_id"
+          ],
+          "key": "collateral_id",
+          "used_key_parts": [
+            "collateral_id"
+          ],
+          "key_length": "33",
+          "ref": [
+            "projecta.collateral.collateral_id"
+          ],
+          "rows_examined_per_scan": 1,
+          "rows_produced_per_join": 1845,
+          "filtered": "33.33",
+          "cost_info": {
+            "read_cost": "5537.63",
+            "eval_cost": "369.14",
+            "prefix_cost": "152307.79",
+            "data_read_per_join": "144K"
+          },
+          "used_columns": [
+            "appreciation_value",
+            "collateral_id"
+          ],
+          "attached_condition": "(`projecta`.`real_estate`.`appreciation_value` > 100000)"
+        }
+      }
+    ]
+  }
+}

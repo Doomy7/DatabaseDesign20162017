@@ -1,0 +1,122 @@
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "12642984.96"
+    },
+    "nested_loop": [
+      {
+        "table": {
+          "table_name": "balance",
+          "access_type": "index",
+          "possible_keys": [
+            "balanceIndex"
+          ],
+          "key": "balanceIndex",
+          "used_key_parts": [
+            "account_id",
+            "balance_type",
+            "balance_value",
+            "balance_date"
+          ],
+          "key_length": "85",
+          "rows_examined_per_scan": 9005272,
+          "rows_produced_per_join": 900527,
+          "filtered": "10.00",
+          "using_index": true,
+          "cost_info": {
+            "read_cost": "1656468.96",
+            "eval_cost": "180105.44",
+            "prefix_cost": "1836574.40",
+            "data_read_per_join": "75M"
+          },
+          "used_columns": [
+            "account_id",
+            "balance_value",
+            "balance_date",
+            "balance_type"
+          ],
+          "attached_condition": "((`projecta`.`balance`.`balance_type` = 'Capital') and ((`projecta`.`balance`.`balance_date` is not null) and (`projecta`.`balance`.`account_id` is not null)))"
+        }
+      },
+      {
+        "table": {
+          "table_name": "selection1",
+          "access_type": "ref",
+          "possible_keys": [
+            "<auto_key0>"
+          ],
+          "key": "<auto_key0>",
+          "used_key_parts": [
+            "maxDate",
+            "account_id"
+          ],
+          "key_length": "52",
+          "ref": [
+            "projecta.balance.balance_date",
+            "projecta.balance.account_id"
+          ],
+          "rows_examined_per_scan": 10,
+          "rows_produced_per_join": 9005342,
+          "filtered": "100.00",
+          "using_index": true,
+          "cost_info": {
+            "read_cost": "9005342.13",
+            "eval_cost": "1801068.43",
+            "prefix_cost": "12642984.96",
+            "data_read_per_join": "480M"
+          },
+          "used_columns": [
+            "maxDate",
+            "account_id"
+          ],
+          "materialized_from_subquery": {
+            "using_temporary_table": true,
+            "dependent": false,
+            "cacheable": true,
+            "query_block": {
+              "select_id": 2,
+              "cost_info": {
+                "query_cost": "1836574.40"
+              },
+              "grouping_operation": {
+                "using_filesort": false,
+                "table": {
+                  "table_name": "balance",
+                  "access_type": "index",
+                  "possible_keys": [
+                    "balanceIndex"
+                  ],
+                  "key": "balanceIndex",
+                  "used_key_parts": [
+                    "account_id",
+                    "balance_type",
+                    "balance_value",
+                    "balance_date"
+                  ],
+                  "key_length": "85",
+                  "rows_examined_per_scan": 9005272,
+                  "rows_produced_per_join": 900527,
+                  "filtered": "10.00",
+                  "using_index": true,
+                  "cost_info": {
+                    "read_cost": "1656468.96",
+                    "eval_cost": "180105.44",
+                    "prefix_cost": "1836574.40",
+                    "data_read_per_join": "75M"
+                  },
+                  "used_columns": [
+                    "account_id",
+                    "balance_date",
+                    "balance_type"
+                  ],
+                  "attached_condition": "(((`projecta`.`balance`.`balance_date` - <cache>(cast('2006-01-01' as date))) <= 0) and (`projecta`.`balance`.`balance_type` = 'Capital'))"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "971857.78"
+    },
+    "nested_loop": [
+      {
+        "table": {
+          "table_name": "Selection2",
+          "access_type": "ALL",
+          "rows_examined_per_scan": 50997,
+          "rows_produced_per_join": 16997,
+          "filtered": "33.33",
+          "cost_info": {
+            "read_cost": "9359.79",
+            "eval_cost": "3399.46",
+            "prefix_cost": "12759.25",
+            "data_read_per_join": "1M"
+          },
+          "used_columns": [
+            "maxbal",
+            "account_id"
+          ],
+          "attached_condition": "((`selection2`.`maxbal` <= 500000) and (`selection2`.`account_id` is not null))",
+          "materialized_from_subquery": {
+            "using_temporary_table": true,
+            "dependent": false,
+            "cacheable": true,
+            "query_block": {
+              "select_id": 3,
+              "cost_info": {
+                "query_cost": "139757.60"
+              },
+              "grouping_operation": {
+                "using_filesort": false,
+                "table": {
+                  "table_name": "balance",
+                  "access_type": "range",
+                  "possible_keys": [
+                    "balanceIndex"
+                  ],
+                  "key": "balanceIndex",
+                  "used_key_parts": [
+                    "account_id",
+                    "balance_type"
+                  ],
+                  "key_length": "75",
+                  "rows_examined_per_scan": 50997,
+                  "rows_produced_per_join": 50997,
+                  "filtered": "100.00",
+                  "using_index_for_group_by": true,
+                  "cost_info": {
+                    "read_cost": "129558.20",
+                    "eval_cost": "10199.40",
+                    "prefix_cost": "139757.60",
+                    "data_read_per_join": "4M"
+                  },
+                  "used_columns": [
+                    "account_id",
+                    "balance_value",
+                    "balance_type"
+                  ],
+                  "attached_condition": "(`projecta`.`balance`.`balance_type` = 'Capital')"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "table": {
+          "table_name": "account",
+          "access_type": "eq_ref",
+          "possible_keys": [
+            "PRIMARY",
+            "contract_id"
+          ],
+          "key": "PRIMARY",
+          "used_key_parts": [
+            "account_id"
+          ],
+          "key_length": "47",
+          "ref": [
+            "Selection2.account_id"
+          ],
+          "rows_examined_per_scan": 1,
+          "rows_produced_per_join": 16997,
+          "filtered": "100.00",
+          "cost_info": {
+            "read_cost": "16997.30",
+            "eval_cost": "3399.46",
+            "prefix_cost": "33156.01",
+            "data_read_per_join": "2M"
+          },
+          "used_columns": [
+            "account_id",
+            "contract_id"
+          ],
+          "attached_condition": "(`projecta`.`account`.`contract_id` is not null)"
+        }
+      },
+      {
+        "table": {
+          "table_name": "contract",
+          "access_type": "eq_ref",
+          "possible_keys": [
+            "PRIMARY",
+            "customer_id"
+          ],
+          "key": "PRIMARY",
+          "used_key_parts": [
+            "contract_id"
+          ],
+          "key_length": "44",
+          "ref": [
+            "projecta.account.contract_id"
+          ],
+          "rows_examined_per_scan": 1,
+          "rows_produced_per_join": 16997,
+          "filtered": "100.00",
+          "cost_info": {
+            "read_cost": "16997.30",
+            "eval_cost": "3399.46",
+            "prefix_cost": "53552.77",
+            "data_read_per_join": "2M"
+          },
+          "used_columns": [
+            "contract_id",
+            "customer_id"
+          ],
+          "attached_condition": "(`projecta`.`contract`.`customer_id` is not null)"
+        }
+      },
+      {
+        "table": {
+          "table_name": "customer",
+          "access_type": "eq_ref",
+          "possible_keys": [
+            "PRIMARY"
+          ],
+          "key": "PRIMARY",
+          "used_key_parts": [
+            "customer_id"
+          ],
+          "key_length": "29",
+          "ref": [
+            "projecta.contract.customer_id"
+          ],
+          "rows_examined_per_scan": 1,
+          "rows_produced_per_join": 16997,
+          "filtered": "100.00",
+          "cost_info": {
+            "read_cost": "16997.30",
+            "eval_cost": "3399.46",
+            "prefix_cost": "73949.53",
+            "data_read_per_join": "1M"
+          },
+          "used_columns": [
+            "customer_id",
+            "birth_date"
+          ],
+          "attached_condition": "((<cache>(year(curdate())) - year(`projecta`.`customer`.`birth_date`)) > 60)"
+        }
+      },
+      {
+        "table": {
+          "table_name": "collateral",
+          "access_type": "ref",
+          "possible_keys": [
+            "contract_id",
+            "collateralIndex"
+          ],
+          "key": "contract_id",
+          "used_key_parts": [
+            "contract_id"
+          ],
+          "key_length": "45",
+          "ref": [
+            "projecta.account.contract_id"
+          ],
+          "rows_examined_per_scan": 44,
+          "rows_produced_per_join": 124696,
+          "filtered": "16.66",
+          "cost_info": {
+            "read_cost": "748256.87",
+            "eval_cost": "24939.34",
+            "prefix_cost": "971857.78",
+            "data_read_per_join": "19M"
+          },
+          "used_columns": [
+            "collateral_id",
+            "collateral_amount",
+            "collateral_relation_type",
+            "contract_id"
+          ],
+          "attached_condition": "((`projecta`.`collateral`.`collateral_relation_type` = '2') and (`projecta`.`collateral`.`collateral_amount` > 1000000))"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "120758.77"
+    },
+    "nested_loop": [
+      {
+        "table": {
+          "table_name": "collateral",
+          "access_type": "ALL",
+          "possible_keys": [
+            "PRIMARY",
+            "account_id"
+          ],
+          "rows_examined_per_scan": 451773,
+          "rows_produced_per_join": 4517,
+          "filtered": "1.00",
+          "cost_info": {
+            "read_cost": "94357.05",
+            "eval_cost": "903.55",
+            "prefix_cost": "95260.60",
+            "data_read_per_join": "741K"
+          },
+          "used_columns": [
+            "collateral_id",
+            "collateral_type",
+            "collateral_relation_type",
+            "account_id"
+          ],
+          "attached_condition": "(((`projecta`.`collateral`.`collateral_relation_type` = '3') and (`projecta`.`collateral`.`collateral_type` = '1')) and (`projecta`.`collateral`.`account_id` is not null))"
+        }
+      },
+      {
+        "table": {
+          "table_name": "real_estate",
+          "access_type": "ref",
+          "possible_keys": [
+            "collateral_id"
+          ],
+          "key": "collateral_id",
+          "used_key_parts": [
+            "collateral_id"
+          ],
+          "key_length": "33",
+          "ref": [
+            "projecta.collateral.collateral_id"
+          ],
+          "rows_examined_per_scan": 1,
+          "rows_produced_per_join": 1505,
+          "filtered": "33.33",
+          "cost_info": {
+            "read_cost": "4517.73",
+            "eval_cost": "301.15",
+            "prefix_cost": "100681.88",
+            "data_read_per_join": "117K"
+          },
+          "used_columns": [
+            "appreciation_value",
+            "collateral_id"
+          ],
+          "attached_condition": "(`projecta`.`real_estate`.`appreciation_value` > 100000)"
+        }
+      },
+      {
+        "table": {
+          "table_name": "selection1",
+          "access_type": "ref",
+          "possible_keys": [
+            "<auto_key1>"
+          ],
+          "key": "<auto_key1>",
+          "used_key_parts": [
+            "account_id"
+          ],
+          "key_length": "48",
+          "ref": [
+            "projecta.collateral.account_id"
+          ],
+          "rows_examined_per_scan": 11,
+          "rows_produced_per_join": 5576,
+          "filtered": "33.33",
+          "cost_info": {
+            "read_cost": "16730.75",
+            "eval_cost": "1115.27",
+            "prefix_cost": "120758.77",
+            "data_read_per_join": "348K"
+          },
+          "used_columns": [
+            "balance_value",
+            "account_id"
+          ],
+          "attached_condition": "(`selection1`.`balance_value` <= 10000)",
+          "materialized_from_subquery": {
+            "using_temporary_table": true,
+            "dependent": false,
+            "cacheable": true,
+            "query_block": {
+              "select_id": 2,
+              "cost_info": {
+                "query_cost": "1967506.40"
+              },
+              "grouping_operation": {
+                "using_filesort": false,
+                "table": {
+                  "table_name": "balance",
+                  "access_type": "index",
+                  "possible_keys": [
+                    "account_id"
+                  ],
+                  "key": "account_id",
+                  "used_key_parts": [
+                    "account_id"
+                  ],
+                  "key_length": "48",
+                  "rows_examined_per_scan": 9647452,
+                  "rows_produced_per_join": 964745,
+                  "filtered": "10.00",
+                  "cost_info": {
+                    "read_cost": "1774557.36",
+                    "eval_cost": "192949.04",
+                    "prefix_cost": "1967506.40",
+                    "data_read_per_join": "80M"
+                  },
+                  "used_columns": [
+                    "account_id",
+                    "balance_value",
+                    "balance_type"
+                  ],
+                  "attached_condition": "(`projecta`.`balance`.`balance_type` = 'Interest')"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

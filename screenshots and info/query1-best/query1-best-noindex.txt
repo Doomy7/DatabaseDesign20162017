@@ -1,0 +1,143 @@
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "112953.75"
+    },
+    "table": {
+      "table_name": "Selection2",
+      "access_type": "ALL",
+      "rows_examined_per_scan": 451775,
+      "rows_produced_per_join": 150576,
+      "filtered": "33.33",
+      "cost_info": {
+        "read_cost": "82838.43",
+        "eval_cost": "30115.32",
+        "prefix_cost": "112953.75",
+        "data_read_per_join": "10M"
+      },
+      "used_columns": [
+        "account_id",
+        "sumcom",
+        "maxbal"
+      ],
+      "attached_condition": "(`selection2`.`maxbal` > `selection2`.`sumcom`)",
+      "materialized_from_subquery": {
+        "using_temporary_table": true,
+        "dependent": false,
+        "cacheable": true,
+        "query_block": {
+          "select_id": 2,
+          "cost_info": {
+            "query_cost": "1089166.36"
+          },
+          "grouping_operation": {
+            "using_temporary_table": true,
+            "using_filesort": true,
+            "cost_info": {
+              "sort_cost": "451775.35"
+            },
+            "nested_loop": [
+              {
+                "table": {
+                  "table_name": "collateral",
+                  "access_type": "ALL",
+                  "possible_keys": [
+                    "account_id"
+                  ],
+                  "rows_examined_per_scan": 451773,
+                  "rows_produced_per_join": 45177,
+                  "filtered": "10.00",
+                  "cost_info": {
+                    "read_cost": "86225.14",
+                    "eval_cost": "9035.46",
+                    "prefix_cost": "95260.60",
+                    "data_read_per_join": "7M"
+                  },
+                  "used_columns": [
+                    "collateral_id",
+                    "collateral_amount",
+                    "collateral_relation_type",
+                    "account_id"
+                  ],
+                  "attached_condition": "((`projecta`.`collateral`.`collateral_relation_type` = '3') and (`projecta`.`collateral`.`account_id` is not null))"
+                }
+              },
+              {
+                "table": {
+                  "table_name": "Selection1",
+                  "access_type": "ref",
+                  "possible_keys": [
+                    "<auto_key0>"
+                  ],
+                  "key": "<auto_key0>",
+                  "used_key_parts": [
+                    "account_id"
+                  ],
+                  "key_length": "48",
+                  "ref": [
+                    "projecta.collateral.account_id"
+                  ],
+                  "rows_examined_per_scan": 10,
+                  "rows_produced_per_join": 451775,
+                  "filtered": "100.00",
+                  "cost_info": {
+                    "read_cost": "451775.35",
+                    "eval_cost": "90355.07",
+                    "prefix_cost": "637391.02",
+                    "data_read_per_join": "27M"
+                  },
+                  "used_columns": [
+                    "account_id",
+                    "maxbal"
+                  ],
+                  "materialized_from_subquery": {
+                    "using_temporary_table": true,
+                    "dependent": false,
+                    "cacheable": true,
+                    "query_block": {
+                      "select_id": 3,
+                      "cost_info": {
+                        "query_cost": "1967506.40"
+                      },
+                      "grouping_operation": {
+                        "using_filesort": false,
+                        "table": {
+                          "table_name": "balance",
+                          "access_type": "index",
+                          "possible_keys": [
+                            "account_id"
+                          ],
+                          "key": "account_id",
+                          "used_key_parts": [
+                            "account_id"
+                          ],
+                          "key_length": "48",
+                          "rows_examined_per_scan": 9647452,
+                          "rows_produced_per_join": 964745,
+                          "filtered": "10.00",
+                          "cost_info": {
+                            "read_cost": "1774557.36",
+                            "eval_cost": "192949.04",
+                            "prefix_cost": "1967506.40",
+                            "data_read_per_join": "80M"
+                          },
+                          "used_columns": [
+                            "account_id",
+                            "balance_value",
+                            "balance_type"
+                          ],
+                          "attached_condition": "(`projecta`.`balance`.`balance_type` = 'Capital')"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
